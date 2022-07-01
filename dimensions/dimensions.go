@@ -1,3 +1,4 @@
+// Package dimensions provides dimensional representation and mathematics for Imperial distance measurements
 package dimensions
 
 import (
@@ -60,6 +61,8 @@ func ToFractional(total float64) (Imp, error) {
 		}, nil
 	}
 
+	// not efficient but it works :P
+	// Could use something like a lookup table instead, once the program's functional
 	for _, denominator := range denominators {
 		for numerator := 1; numerator < denominator; numerator++ {
 			if float64(numerator)/float64(denominator) == float64(fractional) {
