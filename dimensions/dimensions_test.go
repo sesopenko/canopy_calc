@@ -100,3 +100,127 @@ func TestToFractional(t *testing.T) {
 		})
 	}
 }
+
+func TestImp_Add(t *testing.T) {
+	var scenarios = []struct {
+		Description string
+		Left        Imp
+		Right       Imp
+		Expected    float64
+	}{
+		{
+			Description: "1/2 + 1/2 = 1.0",
+			Left: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Right: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Expected: 1.0,
+		},
+		{
+			Description: "1 3/4 + 1/2 = 2.25",
+			Left: Imp{
+				Inches:      1,
+				Numerator:   3,
+				Denominator: 4,
+			},
+			Right: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Expected: 2.25,
+		},
+	}
+	for _, scenario := range scenarios {
+		t.Run(scenario.Description, func(t *testing.T) {
+			result := scenario.Left.Add(scenario.Right).ToFloat()
+			assert.Equal(t, scenario.Expected, result)
+		})
+	}
+}
+
+func TestImp_Subtract(t *testing.T) {
+	var scenarios = []struct {
+		Description string
+		Left        Imp
+		Right       Imp
+		Expected    float64
+	}{
+		{
+			Description: "1/2 - 1/2 = 0.0",
+			Left: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Right: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Expected: 0.0,
+		},
+		{
+			Description: "1 3/4 - 1/2 = 1.25",
+			Left: Imp{
+				Inches:      1,
+				Numerator:   3,
+				Denominator: 4,
+			},
+			Right: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Expected: 1.25,
+		},
+	}
+	for _, scenario := range scenarios {
+		t.Run(scenario.Description, func(t *testing.T) {
+			result := scenario.Left.Subtract(scenario.Right).ToFloat()
+			assert.Equal(t, scenario.Expected, result)
+		})
+	}
+}
+
+func TestImp_Multiply(t *testing.T) {
+	var scenarios = []struct {
+		Description string
+		Measurement Imp
+		Multiple    int
+		Expected    float64
+	}{
+		{
+			Description: "1/2 * 2 = 1.0",
+			Measurement: Imp{
+				Inches:      0,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Multiple: 2,
+			Expected: 1.0,
+		},
+		{
+			Description: "2 1/2 * 3 = 7.5",
+			Measurement: Imp{
+				Inches:      2,
+				Numerator:   1,
+				Denominator: 2,
+			},
+			Multiple: 3,
+			Expected: 7.5,
+		},
+	}
+	for _, scenario := range scenarios {
+		t.Run(scenario.Description, func(t *testing.T) {
+			result := scenario.Measurement.Multiply(scenario.Multiple).ToFloat()
+			assert.Equal(t, scenario.Expected, result)
+		})
+	}
+}

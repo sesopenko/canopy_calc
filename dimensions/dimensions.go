@@ -41,7 +41,7 @@ func BuildImp(inches int, numerator int, denominator int) Imp {
 	}
 }
 
-func (i *Imp) ToFloat() float64 {
+func (i Imp) ToFloat() float64 {
 	fractional := float64(i.Numerator) / float64(i.Denominator)
 	return float64(i.Inches) + fractional
 }
@@ -51,6 +51,13 @@ func ToFractional(total float64) (Imp, error) {
 
 	var denominators = []int{
 		2, 4, 8, 32,
+	}
+	if fractional == 0.0 {
+		return Imp{
+			Inches:      int(inches),
+			Numerator:   0,
+			Denominator: 2,
+		}, nil
 	}
 
 	for _, denominator := range denominators {
@@ -65,4 +72,36 @@ func ToFractional(total float64) (Imp, error) {
 		}
 	}
 	return Imp{}, errors.New("Cannot convert to fractional")
+}
+
+func (i Imp) Add(k Imp) Imp {
+	added, err := ToFractional(i.ToFloat() + k.ToFloat())
+	if err != nil {
+		log.Panicln("Could not convert added values to fractional")
+	}
+	return added
+}
+
+func (i Imp) Subtract(k Imp) Imp {
+	total := i.ToFloat() - k.ToFloat()
+	if total < 0.0 {
+		log.Panicln("Cannot represent negative measurements")
+	}
+	subtracted, err := ToFractional(total)
+	if err != nil {
+		log.Panicln("Cannot convert value to fractional")
+	}
+	return subtracted
+}
+
+func (i Imp) Multiply(quantity int) Imp {
+	total := i.ToFloat() * float64(quantity)
+	if total < 0.0 {
+		log.Panicln("Cannot represent negative measurements")
+	}
+	multiplied, err := ToFractional(total)
+	if err != nil {
+		log.Panicln("Cannot convert value to fractional")
+	}
+	return multiplied
 }
