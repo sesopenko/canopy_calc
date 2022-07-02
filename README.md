@@ -1,5 +1,7 @@
 # canopy_calc
 
+![Unit Tests](https://github.com/sesopenko/canopy_calc/actions/workflows/tests.yml/badge.svg?branch=master)
+
 Program for calculating the building of an aquarium canopy.
 
 ## License
