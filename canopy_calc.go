@@ -11,11 +11,7 @@ func main() {
 
 	canopyBuilder := canopy.CanopyBuilder{
 		AquariumTop: dimensions.Rectangle{
-			Width: dimensions.Imp{
-				Inches:      59,
-				Numerator:   0,
-				Denominator: 32,
-			},
+			Width: dimensions.Inches(59),
 			Height: dimensions.Imp{
 				Inches:      22,
 				Numerator:   5,
@@ -40,9 +36,17 @@ func main() {
 
 	result := canopyBuilder.Build()
 
-	output, err := json.MarshalIndent(result, "", "  ")
+	outputDimensions, err := json.MarshalIndent(result, "", "  ")
 	if err != nil {
 		log.Panicln("Unable to convert result to JSON")
 	}
-	log.Println(string(output))
+	log.Println(string(outputDimensions))
+
+	cutList := result.GetCutList()
+	outputCutList, err := json.MarshalIndent(cutList, "", "  ")
+	if err != nil {
+		log.Panicln("Unable to convert cut list to json")
+	}
+	log.Println(string(outputCutList))
+
 }

@@ -99,3 +99,34 @@ func TestPanel_Dimensions(t *testing.T) {
 		})
 	}
 }
+
+func TestPanel_GetCuts(t *testing.T) {
+	var scenarios = []struct {
+		Description  string
+		InputPanel   Panel
+		ExpectedCuts []dimensions.Imp
+	}{
+		{
+			Description: "happy path",
+			InputPanel: Panel{
+				Horizontal:           dimensions.BuildImp(12, 3, 8),
+				Vertical:             dimensions.BuildImp(14, 1, 4),
+				HorizontalFullLength: true,
+				BoardWidth:           dimensions.Inches(1),
+			},
+			ExpectedCuts: []dimensions.Imp{
+				dimensions.BuildImp(12, 3, 8),
+				dimensions.BuildImp(12, 3, 8),
+				dimensions.BuildImp(14, 1, 4),
+				dimensions.BuildImp(14, 1, 4),
+			},
+		},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.Description, func(t *testing.T) {
+			result := s.InputPanel.GetCuts()
+			assert.Equal(t, s.ExpectedCuts, result)
+		})
+	}
+}

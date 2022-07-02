@@ -90,3 +90,57 @@ func TestBuildCanopy(t *testing.T) {
 		})
 	}
 }
+
+func TestCanopy_GetCutList(t *testing.T) {
+	var scenarios = []struct {
+		Description string
+		InputCanopy Canopy
+		ExpectedQty int
+	}{
+		{
+			Description: "Simple panels",
+			InputCanopy: Canopy{
+				FrontPanel: panel.PanelBuilder{
+					BoardWidth: dimensions.Inches(1),
+					AssembledDimensions: dimensions.Rectangle{
+						Width:  dimensions.Inches(12),
+						Height: dimensions.Inches(12),
+					},
+					HorizontalFullLength: true,
+				}.Build(),
+				SidePanel: panel.PanelBuilder{
+					BoardWidth: dimensions.Inches(1),
+					AssembledDimensions: dimensions.Rectangle{
+						Width:  dimensions.Inches(12),
+						Height: dimensions.Inches(12),
+					},
+					HorizontalFullLength: true,
+				}.Build(),
+				RearPanel: panel.PanelBuilder{
+					BoardWidth: dimensions.Inches(1),
+					AssembledDimensions: dimensions.Rectangle{
+						Width:  dimensions.Inches(12),
+						Height: dimensions.Inches(12),
+					},
+					HorizontalFullLength: true,
+				}.Build(),
+				TopPanel: panel.PanelBuilder{
+					BoardWidth: dimensions.Inches(1),
+					AssembledDimensions: dimensions.Rectangle{
+						Width:  dimensions.Inches(12),
+						Height: dimensions.Inches(12),
+					},
+					HorizontalFullLength: true,
+				}.Build(),
+			},
+			ExpectedQty: 20,
+		},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.Description, func(t *testing.T) {
+			result := s.InputCanopy.GetCutList()
+			assert.Len(t, result, s.ExpectedQty)
+		})
+	}
+}

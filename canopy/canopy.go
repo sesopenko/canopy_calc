@@ -3,6 +3,7 @@ package canopy
 import (
 	"canopy_calc/dimensions"
 	"canopy_calc/panel"
+	"sort"
 )
 
 var RestingAllowance = dimensions.Imp{
@@ -84,4 +85,17 @@ func (b CanopyBuilder) Build() Canopy {
 		RearPanel:  rearPanel,
 		TopPanel:   topPanel,
 	}
+}
+
+func (c Canopy) GetCutList() []dimensions.Imp {
+	cutList := []dimensions.Imp{}
+	cutList = append(cutList, c.TopPanel.GetCuts()...)
+	cutList = append(cutList, c.FrontPanel.GetCuts()...)
+	cutList = append(cutList, c.SidePanel.GetCuts()...)
+	cutList = append(cutList, c.SidePanel.GetCuts()...)
+	cutList = append(cutList, c.RearPanel.GetCuts()...)
+	sort.SliceStable(cutList, func(i, j int) bool {
+		return cutList[i].ToFloat() < cutList[j].ToFloat()
+	})
+	return cutList
 }

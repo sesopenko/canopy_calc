@@ -46,3 +46,12 @@ func (p Panel) Dimensions() dimensions.Rectangle {
 		}
 	}
 }
+
+func (p Panel) GetCuts() []dimensions.Imp {
+	return []dimensions.Imp{
+		p.Horizontal,
+		p.Horizontal,
+		p.Vertical,
+		p.Vertical,
+	}
+}
