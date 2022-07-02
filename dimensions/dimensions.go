@@ -14,6 +14,10 @@ type Imp struct {
 	Denominator int
 }
 
+func (i Imp) Format() string {
+	return fmt.Sprintf("%d %d/%d\"", i.Inches, i.Numerator, i.Denominator)
+}
+
 type Fraction struct {
 	Numerator   int
 	Denominator int

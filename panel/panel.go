@@ -1,6 +1,9 @@
 package panel
 
-import "canopy_calc/dimensions"
+import (
+	"canopy_calc/dimensions"
+	"fmt"
+)
 
 type PanelBuilder struct {
 	BoardWidth           dimensions.Imp
@@ -54,4 +57,12 @@ func (p Panel) GetCuts() []dimensions.Imp {
 		p.Vertical,
 		p.Vertical,
 	}
+}
+
+func (p Panel) PrettyPrint(name string) {
+	fmt.Println(name)
+	fmt.Printf("Horizontal: %s\n", p.Horizontal.Format())
+	fmt.Printf("Vertical: %s\n", p.Vertical.Format())
+	fmt.Printf("Assembled: %s x %s\n", p.Dimensions().Width.Format(), p.Dimensions().Height.Format())
+	fmt.Println("")
 }

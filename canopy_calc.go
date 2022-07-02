@@ -3,9 +3,7 @@ package main
 import (
 	"canopy_calc/canopy"
 	"canopy_calc/dimensions"
-	"encoding/json"
 	"fmt"
-	"log"
 )
 
 func main() {
@@ -37,11 +35,14 @@ func main() {
 
 	result := canopyBuilder.Build()
 
-	outputDimensions, err := json.MarshalIndent(result, "", "  ")
-	if err != nil {
-		log.Panicln("Unable to convert result to JSON")
-	}
-	log.Println(string(outputDimensions))
+	fmt.Printf("Board Width: %s\n", canopyBuilder.BoardProfile.Width.Format())
+	fmt.Printf("Aquarium top: %s x %s\n", canopyBuilder.AquariumTop.Width.Format(), canopyBuilder.AquariumTop.Height.Format())
+	fmt.Println("")
+
+	result.FrontPanel.PrettyPrint("FRONT PANEL")
+	result.SidePanel.PrettyPrint("SIDE PANEL")
+	result.RearPanel.PrettyPrint("REAR PANEL")
+	result.TopPanel.PrettyPrint("TOP PANEL")
 
 	cutList := result.GetCutList()
 	fmt.Println("CUT LIST:")
