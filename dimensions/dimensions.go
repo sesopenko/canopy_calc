@@ -19,8 +19,8 @@ type Fraction struct {
 }
 
 type Rectangle struct {
-	X Imp
-	Y Imp
+	Width  Imp
+	Height Imp
 }
 
 func Inches(length int) Imp {
