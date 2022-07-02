@@ -9,14 +9,14 @@ import (
 func TestPanelFromTarget(t *testing.T) {
 	var scenarios = []struct {
 		Description                  string
-		InputSpecifications          PanelSpecification
+		InputSpecifications          PanelBuilder
 		ExpectedHorizontal           float64
 		ExpectedVertical             float64
 		ExpectedHorizontalFullLength bool
 	}{
 		{
 			Description: "full length horizontal",
-			InputSpecifications: PanelSpecification{
+			InputSpecifications: PanelBuilder{
 				BoardWidth: dimensions.Inches(1),
 				AssembledDimensions: dimensions.Rectangle{
 					Width:  dimensions.Inches(12),
@@ -30,7 +30,7 @@ func TestPanelFromTarget(t *testing.T) {
 		},
 		{
 			Description: "short horizontal, full length vertical",
-			InputSpecifications: PanelSpecification{
+			InputSpecifications: PanelBuilder{
 				BoardWidth: dimensions.Inches(1),
 				AssembledDimensions: dimensions.Rectangle{
 					Width:  dimensions.Inches(12),
@@ -45,7 +45,7 @@ func TestPanelFromTarget(t *testing.T) {
 	}
 	for _, scenario := range scenarios {
 		t.Run(scenario.Description, func(t *testing.T) {
-			result := PanelFromTarget(scenario.InputSpecifications)
+			result := scenario.InputSpecifications.Build()
 			assert.Equal(t, scenario.ExpectedHorizontal, result.Horizontal.ToFloat())
 			assert.Equal(t, scenario.ExpectedVertical, result.Vertical.ToFloat())
 			assert.Equal(t, scenario.ExpectedHorizontalFullLength, result.HorizontalFullLength)
