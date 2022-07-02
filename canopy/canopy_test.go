@@ -14,6 +14,7 @@ func TestBuildCanopy(t *testing.T) {
 		ExpectedFrontPanel panel.Panel
 		ExpectedSidePanel  panel.Panel
 		ExpectedRearPanel  panel.Panel
+		ExpectedTopPanel   panel.Panel
 	}{
 		{
 			Description: "Sean's Tank",
@@ -63,6 +64,19 @@ func TestBuildCanopy(t *testing.T) {
 				},
 				HorizontalFullLength: true,
 			}.Build(),
+			ExpectedTopPanel: panel.PanelBuilder{
+				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				AssembledDimensions: dimensions.Rectangle{
+					Width: dimensions.Inches(59).
+						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
+						// Sits on top of the side panels.
+						Add(dimensions.BuildImp(0, 3, 4).Multiply(2)),
+					Height: dimensions.BuildImp(22, 5, 8).
+						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
+						Add(dimensions.BuildImp(0, 3, 4)),
+				},
+				HorizontalFullLength: true,
+			}.Build(),
 		},
 	}
 
@@ -72,6 +86,7 @@ func TestBuildCanopy(t *testing.T) {
 			assert.Equal(t, s.ExpectedFrontPanel, result.FrontPanel, "Should get expected front panel")
 			assert.Equal(t, s.ExpectedSidePanel, result.SidePanel, "Should get expected side panel")
 			assert.Equal(t, s.ExpectedRearPanel, result.RearPanel, "Should get expected rear panel")
+			assert.Equal(t, s.ExpectedTopPanel, result.TopPanel, "Should get expected top panel")
 		})
 	}
 }
