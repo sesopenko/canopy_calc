@@ -12,6 +12,7 @@ type Panel struct {
 	Horizontal           dimensions.Imp
 	Vertical             dimensions.Imp
 	HorizontalFullLength bool
+	BoardWidth           dimensions.Imp
 }
 
 func (s PanelBuilder) Build() Panel {
@@ -28,5 +29,20 @@ func (s PanelBuilder) Build() Panel {
 		Horizontal:           horizontalLength,
 		Vertical:             verticalLength,
 		HorizontalFullLength: s.HorizontalFullLength,
+		BoardWidth:           s.BoardWidth,
+	}
+}
+
+func (p Panel) Dimensions() dimensions.Rectangle {
+	if p.HorizontalFullLength {
+		return dimensions.Rectangle{
+			Width:  p.Horizontal,
+			Height: p.Vertical.Add(p.BoardWidth.Multiply(2)),
+		}
+	} else {
+		return dimensions.Rectangle{
+			Height: p.Vertical,
+			Width:  p.Horizontal.Add(p.BoardWidth.Multiply(2)),
+		}
 	}
 }

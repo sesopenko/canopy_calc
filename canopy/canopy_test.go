@@ -12,6 +12,7 @@ func TestBuildCanopy(t *testing.T) {
 		Description        string
 		InputBuilder       CanopyBuilder
 		ExpectedFrontPanel panel.Panel
+		ExpectedSidePanel  panel.Panel
 	}{
 		{
 			Description: "Sean's Tank",
@@ -37,6 +38,17 @@ func TestBuildCanopy(t *testing.T) {
 					Add(dimensions.BuildImp(0, 3, 4)),
 				HorizontalFullLength: true,
 			},
+			ExpectedSidePanel: panel.Panel{
+				Horizontal: dimensions.BuildImp(22, 5, 8).
+					Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
+					// Should enclose the rear panel, so you don't see it.
+					Add(dimensions.BuildImp(0, 3, 4)),
+				Vertical: dimensions.Inches(17).
+					Add(dimensions.BuildImp(1, 7, 8)).
+					// Should enclose the top panel, so you don't see it.
+					Add(dimensions.BuildImp(0, 3, 4)),
+				HorizontalFullLength: true,
+			},
 		},
 	}
 
@@ -45,6 +57,7 @@ func TestBuildCanopy(t *testing.T) {
 			result := s.InputBuilder.Build()
 			assert.Equal(t, s.ExpectedFrontPanel.HorizontalFullLength, result.FrontPanel.HorizontalFullLength)
 			assert.Equal(t, s.ExpectedFrontPanel.Horizontal, result.FrontPanel.Horizontal)
+			assert.Equal(t, s.ExpectedSidePanel.Horizontal, result.SidePanel.Horizontal)
 		})
 	}
 }

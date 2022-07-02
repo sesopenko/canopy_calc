@@ -20,6 +20,7 @@ type CanopyBuilder struct {
 
 type Canopy struct {
 	FrontPanel panel.Panel
+	SidePanel  panel.Panel
 }
 
 func (b CanopyBuilder) Build() Canopy {
@@ -36,7 +37,18 @@ func (b CanopyBuilder) Build() Canopy {
 
 	frontPanel := frontPanelBuilder.Build()
 
+	sidePanelBuilder := panel.PanelBuilder{
+		BoardWidth: b.BoardProfile.Width,
+		AssembledDimensions: dimensions.Rectangle{
+			Width: b.AquariumTop.Height.Add(RestingAllowance.Multiply(2)).
+				Add(b.BoardProfile.Height),
+			Height: frontPanel.Dimensions().Height.Subtract(b.BoardProfile.Height),
+		},
+		HorizontalFullLength: true,
+	}
+
 	return Canopy{
 		FrontPanel: frontPanel,
+		SidePanel:  sidePanelBuilder.Build(),
 	}
 }

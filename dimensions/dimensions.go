@@ -3,6 +3,7 @@ package dimensions
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"math"
 )
@@ -74,7 +75,7 @@ func ToFractional(total float64) (Imp, error) {
 			}
 		}
 	}
-	return Imp{}, errors.New("Cannot convert to fractional")
+	return Imp{}, errors.New(fmt.Sprintf("Cannot find denominator for: %f", total))
 }
 
 func (i Imp) Add(k Imp) Imp {
@@ -92,7 +93,7 @@ func (i Imp) Subtract(k Imp) Imp {
 	}
 	subtracted, err := ToFractional(total)
 	if err != nil {
-		log.Panicln("Cannot convert value to fractional")
+		log.Panicln("Cannot convert value to fractional", err)
 	}
 	return subtracted
 }
