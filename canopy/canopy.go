@@ -95,7 +95,7 @@ func (c Canopy) GetCutList() []dimensions.Imp {
 	cutList = append(cutList, c.SidePanel.GetCuts()...)
 	cutList = append(cutList, c.RearPanel.GetCuts()...)
 	sort.SliceStable(cutList, func(i, j int) bool {
-		return cutList[i].ToFloat() < cutList[j].ToFloat()
+		return cutList[i].ToFloat() > cutList[j].ToFloat()
 	})
 	return cutList
 }

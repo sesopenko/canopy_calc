@@ -4,6 +4,7 @@ import (
 	"canopy_calc/canopy"
 	"canopy_calc/dimensions"
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -43,10 +44,9 @@ func main() {
 	log.Println(string(outputDimensions))
 
 	cutList := result.GetCutList()
-	outputCutList, err := json.MarshalIndent(cutList, "", "  ")
-	if err != nil {
-		log.Panicln("Unable to convert cut list to json")
+	fmt.Println("CUT LIST:")
+	for _, cut := range cutList {
+		fmt.Printf("%d %d/%d\"\n", cut.Inches, cut.Numerator, cut.Denominator)
 	}
-	log.Println(string(outputCutList))
 
 }
