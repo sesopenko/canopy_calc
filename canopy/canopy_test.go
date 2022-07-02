@@ -13,6 +13,7 @@ func TestBuildCanopy(t *testing.T) {
 		InputBuilder       CanopyBuilder
 		ExpectedFrontPanel panel.Panel
 		ExpectedSidePanel  panel.Panel
+		ExpectedRearPanel  panel.Panel
 	}{
 		{
 			Description: "Sean's Tank",
@@ -28,36 +29,49 @@ func TestBuildCanopy(t *testing.T) {
 				DesiredClearance:  dimensions.Inches(17),
 				WaterlineDistance: dimensions.BuildImp(1, 7, 8),
 			},
-			ExpectedFrontPanel: panel.Panel{
-				// Should extend beyond the width of the tank, to cover the edges of the other panels
-				Horizontal: dimensions.Inches(59).
-					Add(RestingAllowance.Multiply(2)).
-					Add(dimensions.BuildImp(0, 3, 4).Multiply(2)),
-				Vertical: dimensions.Inches(17).
-					Add(dimensions.BuildImp(1, 7, 8)).
-					Add(dimensions.BuildImp(0, 3, 4)),
+			ExpectedFrontPanel: panel.PanelBuilder{
+				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				AssembledDimensions: dimensions.Rectangle{
+					Width: dimensions.Inches(59).
+						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
+						Add(dimensions.BuildImp(0, 3, 4).Multiply(2)),
+					Height: dimensions.Inches(17).
+						Add(dimensions.BuildImp(1, 7, 8)).
+						Add(dimensions.BuildImp(0, 3, 4)),
+				},
 				HorizontalFullLength: true,
-			},
-			ExpectedSidePanel: panel.Panel{
-				Horizontal: dimensions.BuildImp(22, 5, 8).
-					Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
-					// Should enclose the rear panel, so you don't see it.
-					Add(dimensions.BuildImp(0, 3, 4)),
-				Vertical: dimensions.Inches(17).
-					Add(dimensions.BuildImp(1, 7, 8)).
-					// Should enclose the top panel, so you don't see it.
-					Add(dimensions.BuildImp(0, 3, 4)),
+			}.Build(),
+			ExpectedSidePanel: panel.PanelBuilder{
+				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				AssembledDimensions: dimensions.Rectangle{
+					Width: dimensions.BuildImp(22, 5, 8).
+						Add(dimensions.BuildImp(0, 3, 4)).
+						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)),
+					Height: dimensions.Inches(17).
+						Add(dimensions.BuildImp(1, 7, 8)),
+				},
 				HorizontalFullLength: true,
-			},
+			}.Build(),
+			ExpectedRearPanel: panel.PanelBuilder{
+				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				AssembledDimensions: dimensions.Rectangle{
+					Width: dimensions.Inches(59).
+						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)),
+					Height: dimensions.Inches(17).
+						Add(dimensions.BuildImp(1, 7, 8)).
+						Subtract(dimensions.BuildImp(0, 3, 4)),
+				},
+				HorizontalFullLength: true,
+			}.Build(),
 		},
 	}
 
 	for _, s := range scenarios {
 		t.Run(s.Description, func(t *testing.T) {
 			result := s.InputBuilder.Build()
-			assert.Equal(t, s.ExpectedFrontPanel.HorizontalFullLength, result.FrontPanel.HorizontalFullLength)
-			assert.Equal(t, s.ExpectedFrontPanel.Horizontal, result.FrontPanel.Horizontal)
-			assert.Equal(t, s.ExpectedSidePanel.Horizontal, result.SidePanel.Horizontal)
+			assert.Equal(t, s.ExpectedFrontPanel, result.FrontPanel, "Should get expected front panel")
+			assert.Equal(t, s.ExpectedSidePanel, result.SidePanel, "Should get expected side panel")
+			assert.Equal(t, s.ExpectedRearPanel, result.RearPanel, "Should get expected rear panel")
 		})
 	}
 }

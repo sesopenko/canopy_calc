@@ -21,6 +21,7 @@ type CanopyBuilder struct {
 type Canopy struct {
 	FrontPanel panel.Panel
 	SidePanel  panel.Panel
+	RearPanel  panel.Panel
 }
 
 func (b CanopyBuilder) Build() Canopy {
@@ -41,14 +42,33 @@ func (b CanopyBuilder) Build() Canopy {
 		BoardWidth: b.BoardProfile.Width,
 		AssembledDimensions: dimensions.Rectangle{
 			Width: b.AquariumTop.Height.Add(RestingAllowance.Multiply(2)).
+				// Extend off the back to enclose the rear panel.
 				Add(b.BoardProfile.Height),
-			Height: frontPanel.Dimensions().Height.Subtract(b.BoardProfile.Height),
+			Height: frontPanel.Dimensions().Height.
+				// Top panel sits on top
+				Subtract(b.BoardProfile.Height),
+		},
+		HorizontalFullLength: true,
+	}
+	sidePanel := sidePanelBuilder.Build()
+
+	rearPanelBuilder := panel.PanelBuilder{
+		BoardWidth: b.BoardProfile.Width,
+		AssembledDimensions: dimensions.Rectangle{
+			Width: b.AquariumTop.Width.
+				Add(RestingAllowance.Multiply(2)),
+			Height: sidePanel.Dimensions().Height.
+				// Give it space for the top panel to sit on top of it
+				Subtract(dimensions.BuildImp(0, 3, 4)),
 		},
 		HorizontalFullLength: true,
 	}
 
+	rearPanel := rearPanelBuilder.Build()
+
 	return Canopy{
 		FrontPanel: frontPanel,
-		SidePanel:  sidePanelBuilder.Build(),
+		SidePanel:  sidePanel,
+		RearPanel:  rearPanel,
 	}
 }
