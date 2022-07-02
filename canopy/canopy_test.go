@@ -1,8 +1,8 @@
 package canopy
 
 import (
-	"canopy_calc/component"
 	"canopy_calc/dimensions"
+	"canopy_calc/panel"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,7 +11,7 @@ func TestBuildCanopy(t *testing.T) {
 	var scenarios = []struct {
 		Description        string
 		InputBuilder       CanopyBuilder
-		ExpectedFrontPanel component.Panel
+		ExpectedFrontPanel panel.Panel
 	}{
 		{
 			Description: "Sean's Tank",
@@ -27,7 +27,7 @@ func TestBuildCanopy(t *testing.T) {
 				DesiredClearance:  dimensions.Inches(17),
 				WaterlineDistance: dimensions.BuildImp(1, 7, 8),
 			},
-			ExpectedFrontPanel: component.Panel{
+			ExpectedFrontPanel: panel.Panel{
 				// Should extend beyond the width of the tank, to cover the edges of the other panels
 				Horizontal: dimensions.Inches(59).
 					Add(RestingAllowance.Multiply(2)).

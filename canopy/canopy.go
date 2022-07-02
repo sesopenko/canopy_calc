@@ -1,8 +1,8 @@
 package canopy
 
 import (
-	"canopy_calc/component"
 	"canopy_calc/dimensions"
+	"canopy_calc/panel"
 )
 
 var RestingAllowance = dimensions.Imp{
@@ -19,11 +19,11 @@ type CanopyBuilder struct {
 }
 
 type Canopy struct {
-	FrontPanel component.Panel
+	FrontPanel panel.Panel
 }
 
 func (b CanopyBuilder) Build() Canopy {
-	frontPanelBuilder := component.PanelBuilder{
+	frontPanelBuilder := panel.PanelBuilder{
 		BoardWidth: b.BoardProfile.Width,
 		AssembledDimensions: dimensions.Rectangle{
 			Width: b.AquariumTop.Width.

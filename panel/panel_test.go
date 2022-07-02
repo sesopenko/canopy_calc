@@ -1,4 +1,4 @@
-package component
+package panel
 
 import (
 	"canopy_calc/dimensions"
