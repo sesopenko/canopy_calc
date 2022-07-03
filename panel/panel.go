@@ -9,6 +9,7 @@ type PanelBuilder struct {
 	BoardWidth           dimensions.Imp
 	AssembledDimensions  dimensions.Rectangle
 	HorizontalFullLength bool
+	CenterColumn         bool
 }
 
 type Panel struct {
@@ -16,6 +17,7 @@ type Panel struct {
 	Vertical             dimensions.Imp
 	HorizontalFullLength bool
 	BoardWidth           dimensions.Imp
+	CenterColumn         bool
 }
 
 func (s PanelBuilder) Build() Panel {
@@ -33,6 +35,7 @@ func (s PanelBuilder) Build() Panel {
 		Vertical:             verticalLength,
 		HorizontalFullLength: s.HorizontalFullLength,
 		BoardWidth:           s.BoardWidth,
+		CenterColumn:         s.CenterColumn,
 	}
 }
 
@@ -51,12 +54,16 @@ func (p Panel) Dimensions() dimensions.Rectangle {
 }
 
 func (p Panel) GetCuts() []dimensions.Imp {
-	return []dimensions.Imp{
+	cuts := []dimensions.Imp{
 		p.Horizontal,
 		p.Horizontal,
 		p.Vertical,
 		p.Vertical,
 	}
+	if p.CenterColumn {
+		cuts = append(cuts, p.Vertical)
+	}
+	return cuts
 }
 
 func (p Panel) PrettyPrint(name string) {
