@@ -62,6 +62,7 @@ func (b CanopyBuilder) Build() Canopy {
 			Height: sidePanel.Dimensions().Height,
 		},
 		HorizontalFullLength: true,
+		CenterColumn:         true,
 	}
 
 	rearPanel := rearPanelBuilder.Build()

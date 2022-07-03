@@ -37,6 +37,7 @@ func main() {
 
 	fmt.Printf("Board Width: %s\n", canopyBuilder.BoardProfile.Width.Format())
 	fmt.Printf("Aquarium top: %s x %s\n", canopyBuilder.AquariumTop.Width.Format(), canopyBuilder.AquariumTop.Height.Format())
+	fmt.Printf("Water Line: %s\n", canopyBuilder.WaterlineDistance.Format())
 	fmt.Println("")
 
 	result.FrontPanel.PrettyPrint("FRONT PANEL")

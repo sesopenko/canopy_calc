@@ -71,5 +71,8 @@ func (p Panel) PrettyPrint(name string) {
 	fmt.Printf("Horizontal: %s\n", p.Horizontal.Format())
 	fmt.Printf("Vertical: %s\n", p.Vertical.Format())
 	fmt.Printf("Assembled: %s x %s\n", p.Dimensions().Width.Format(), p.Dimensions().Height.Format())
+	if p.CenterColumn {
+		fmt.Printf("Has center column\n")
+	}
 	fmt.Println("")
 }

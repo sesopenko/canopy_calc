@@ -77,6 +77,7 @@ func TestBuildCanopy(t *testing.T) {
 						Add(waterLine),
 				},
 				HorizontalFullLength: true,
+				CenterColumn:         true,
 			}.Build(),
 			// This panel is concealed by the front panel, and sits on top of the side
 			// and rear panels.
@@ -139,6 +140,7 @@ func TestCanopy_GetCutList(t *testing.T) {
 						Height: dimensions.Inches(12),
 					},
 					HorizontalFullLength: true,
+					CenterColumn:         true,
 				}.Build(),
 				TopPanel: panel.PanelBuilder{
 					BoardWidth: dimensions.Inches(1),
@@ -149,7 +151,7 @@ func TestCanopy_GetCutList(t *testing.T) {
 					HorizontalFullLength: true,
 				}.Build(),
 			},
-			ExpectedQty: 20,
+			ExpectedQty: 21,
 		},
 	}
 
