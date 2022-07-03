@@ -59,9 +59,7 @@ func (b CanopyBuilder) Build() Canopy {
 		AssembledDimensions: dimensions.Rectangle{
 			Width: b.AquariumTop.Width.
 				Add(RestingAllowance.Multiply(2)),
-			Height: sidePanel.Dimensions().Height.
-				// Give it space for the top panel to sit on top of it
-				Subtract(dimensions.BuildImp(0, 3, 4)),
+			Height: sidePanel.Dimensions().Height,
 		},
 		HorizontalFullLength: true,
 	}

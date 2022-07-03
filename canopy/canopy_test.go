@@ -42,18 +42,22 @@ func TestBuildCanopy(t *testing.T) {
 				AssembledDimensions: dimensions.Rectangle{
 					Width: tankTopWidth.
 						Add(allowance).
+						// Conceal the side panels.
 						Add(boardDepth.Multiply(2)),
 					Height: targetClearance.
 						// Add water line.
 						Add(waterLine).
+						// Conceal the top panel.
 						Add(boardDepth),
 				},
 				HorizontalFullLength: true,
 			}.Build(),
+			// This panel sits underneath the top panel, and conceals the rear panel.
 			ExpectedSidePanel: panel.PanelBuilder{
 				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
 					Width: tankTopHeight.
+						// Conceal the rear panel:
 						Add(boardDepth).
 						Add(allowance),
 					Height: targetClearance.
@@ -61,17 +65,21 @@ func TestBuildCanopy(t *testing.T) {
 				},
 				HorizontalFullLength: true,
 			}.Build(),
+			// This panel sits rests under the top panel, and is concealed by the
+			// front panel.
 			ExpectedRearPanel: panel.PanelBuilder{
 				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
+					// Is concealed by side panels, sitting between them.
 					Width: tankTopWidth.
 						Add(allowance),
 					Height: targetClearance.
-						Add(waterLine).
-						Subtract(boardDepth),
+						Add(waterLine),
 				},
 				HorizontalFullLength: true,
 			}.Build(),
+			// This panel is concealed by the front panel, and sits on top of the side
+			// and rear panels.
 			ExpectedTopPanel: panel.PanelBuilder{
 				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
