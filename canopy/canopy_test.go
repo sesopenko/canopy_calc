@@ -8,6 +8,13 @@ import (
 )
 
 func TestBuildCanopy(t *testing.T) {
+	tankTopWidth := dimensions.Inches(59)
+	tankTopHeight := dimensions.BuildImp(22, 5, 8)
+	targetClearance := dimensions.Inches(17)
+	boardWidth := dimensions.BuildImp(3, 3, 8)
+	boardDepth := dimensions.BuildImp(0, 3, 4)
+	allowance := dimensions.BuildImp(0, 1, 8).Multiply(2)
+	waterLine := dimensions.BuildImp(1, 7, 8)
 	var scenarios = []struct {
 		Description        string
 		InputBuilder       CanopyBuilder
@@ -20,60 +27,61 @@ func TestBuildCanopy(t *testing.T) {
 			Description: "Sean's Tank",
 			InputBuilder: CanopyBuilder{
 				AquariumTop: dimensions.Rectangle{
-					Width:  dimensions.Inches(59),
-					Height: dimensions.BuildImp(22, 5, 8),
+					Width:  tankTopWidth,
+					Height: tankTopHeight,
 				},
 				BoardProfile: dimensions.Rectangle{
-					Width:  dimensions.BuildImp(3, 3, 8),
-					Height: dimensions.BuildImp(0, 3, 4),
+					Width:  boardWidth,
+					Height: boardDepth,
 				},
-				DesiredClearance:  dimensions.Inches(17),
-				WaterlineDistance: dimensions.BuildImp(1, 7, 8),
+				DesiredClearance:  targetClearance,
+				WaterlineDistance: waterLine,
 			},
 			ExpectedFrontPanel: panel.PanelBuilder{
-				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
-					Width: dimensions.Inches(59).
-						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
-						Add(dimensions.BuildImp(0, 3, 4).Multiply(2)),
-					Height: dimensions.Inches(17).
-						Add(dimensions.BuildImp(1, 7, 8)).
-						Add(dimensions.BuildImp(0, 3, 4)),
+					Width: tankTopWidth.
+						Add(allowance).
+						Add(boardDepth.Multiply(2)),
+					Height: targetClearance.
+						// Add water line.
+						Add(waterLine).
+						Add(boardDepth),
 				},
 				HorizontalFullLength: true,
 			}.Build(),
 			ExpectedSidePanel: panel.PanelBuilder{
-				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
-					Width: dimensions.BuildImp(22, 5, 8).
-						Add(dimensions.BuildImp(0, 3, 4)).
-						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)),
-					Height: dimensions.Inches(17).
-						Add(dimensions.BuildImp(1, 7, 8)),
+					Width: tankTopHeight.
+						Add(boardDepth).
+						Add(allowance),
+					Height: targetClearance.
+						Add(waterLine),
 				},
 				HorizontalFullLength: true,
 			}.Build(),
 			ExpectedRearPanel: panel.PanelBuilder{
-				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
-					Width: dimensions.Inches(59).
-						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)),
-					Height: dimensions.Inches(17).
-						Add(dimensions.BuildImp(1, 7, 8)).
-						Subtract(dimensions.BuildImp(0, 3, 4)),
+					Width: tankTopWidth.
+						Add(allowance),
+					Height: targetClearance.
+						Add(waterLine).
+						Subtract(boardDepth),
 				},
 				HorizontalFullLength: true,
 			}.Build(),
 			ExpectedTopPanel: panel.PanelBuilder{
-				BoardWidth: dimensions.BuildImp(3, 3, 8),
+				BoardWidth: boardWidth,
 				AssembledDimensions: dimensions.Rectangle{
-					Width: dimensions.Inches(59).
-						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
-						// Sits on top of the side panels.
-						Add(dimensions.BuildImp(0, 3, 4).Multiply(2)),
-					Height: dimensions.BuildImp(22, 5, 8).
-						Add(dimensions.BuildImp(0, 1, 8).Multiply(2)).
-						Add(dimensions.BuildImp(0, 3, 4)),
+					Width: tankTopWidth.
+						Add(allowance).
+						// Sits between the side panels
+						Add(boardDepth.Multiply(2)),
+					Height: tankTopHeight.
+						Add(allowance).
+						Add(boardDepth),
 				},
 				HorizontalFullLength: true,
 			}.Build(),

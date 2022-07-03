@@ -15,7 +15,10 @@ type Imp struct {
 }
 
 func (i Imp) Format() string {
-	return fmt.Sprintf("%d %d/%d\"", i.Inches, i.Numerator, i.Denominator)
+	if i.Numerator == 0 {
+		return fmt.Sprintf("%d\"", i.Inches)
+	}
+	return fmt.Sprintf("%d-%d/%d\"", i.Inches, i.Numerator, i.Denominator)
 }
 
 type Fraction struct {

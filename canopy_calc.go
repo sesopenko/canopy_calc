@@ -47,7 +47,7 @@ func main() {
 	cutList := result.GetCutList()
 	fmt.Println("CUT LIST:")
 	for _, cut := range cutList {
-		fmt.Printf("%d %d/%d\"\n", cut.Inches, cut.Numerator, cut.Denominator)
+		fmt.Printf("%s\n", cut.Format())
 	}
 
 }
